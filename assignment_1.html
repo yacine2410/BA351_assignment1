@@ -269,7 +269,50 @@ summary(mod1)</code></pre>
 ##  ----------------------------------------------------
 ##   simultaneous     7.376122e+01     2    9.615130e-17 
 ##  ----------------------------------------------------</code></pre>
-<p>Since the p-values are much smaller than 0.05, we have enough evidence to reject H0, and we can say that the variance for both variables is not constant, showing that there is heteroscedasticity in the regression, so it may not be reliable.</p>
+<p>Since the p-values are much smaller than 0.05, we have enough evidence to reject H0, and we can say that the variance is not constant, showing that there is heteroskedasticity in the regression, so it may not be reliable.</p>
+<p>Let’s try a GLS model:</p>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Loading required package: carData</code></pre>
+<pre><code>## 
+## Attaching package: &#39;car&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     some</code></pre>
+<pre class="r"><code>library(nlme)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;nlme&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<pre class="r"><code>mod2 &lt;- gls(wage ~ educ + age, data = data)
+summary(mod2)</code></pre>
+<pre><code>## Generalized least squares fit by REML
+##   Model: wage ~ educ + age 
+##   Data: data 
+##        AIC      BIC    logLik
+##   3848.122 3866.602 -1920.061
+## 
+## Coefficients:
+##                 Value Std.Error   t-value p-value
+## (Intercept) -3.259290 0.9085928 -3.587185  0.0004
+## educ         0.453283 0.0495710  9.144123  0.0000
+## age          0.001515 0.0140022  0.108174  0.9139
+## 
+##  Correlation: 
+##      (Intr) educ  
+## educ -0.749       
+## age  -0.736  0.120
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -1.4686139 -0.7271744 -0.1448517  0.4473221  7.3980592 
+## 
+## Residual standard error: 3.077207 
+## Degrees of freedom: 753 total; 750 residual</code></pre>
+<p>the p-values, and coefficients and std errors are similar in both models.</p>
 </div>
 
 
