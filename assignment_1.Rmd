@@ -1,0 +1,53 @@
+---
+title: "BA351 Advanced Econometrics Assignment 1"
+author: "Yacine Montacer"
+date: "3/9/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## An examination of the effects of age and education level on wage
+
+We have our wage data-set. So let's import it and see what we're working with.
+
+```{r summary}
+#load libraries 
+library(PoEdata)
+library(tidyverse)
+library(haven)
+
+#import dataset wage.dta
+data <- read_dta('./wage.dta')
+
+#view the first few rows of the table 
+head(data)
+
+#summarize the data
+summary(data)
+```
+
+We can see here that our table tracks 3 variables: education (educ), age and wage. It is reasonable to assume that wage is proportional to age and education. So let's consider an Ordinary Least Squares Regression, regressing wage on the independent variables.
+
+Let's suppose that wage(i) = Beta0 + Beta1 * age(i) + Beta2 * educ(i) + e(i)
+
+```{r OLS}
+#define our model 
+mod1 <- lm(wage ~ age + educ, data = data)
+
+#summarize model
+summary(mod1)
+```
+
+So judging by the low R Squared and high P-values, this model is not working. 
+
+Let's test for heteroskedasticity in the regression using the Breusch Pagan Test.
+
+```{r heteroskedasticity}
+library(olsrr)
+ols_test_breusch_pagan(mod1, rhs = TRUE, multiple = TRUE)
+```
+
+Since the p-values are much smaller than 0.05, we have enough evidence to reject H0, and we can say that the variance for both variables is not constant, showing that there is heteroscedasticity in the regression, so it may not be reliable. 
